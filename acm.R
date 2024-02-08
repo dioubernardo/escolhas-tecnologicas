@@ -54,18 +54,19 @@ respostas <- respostas[,-8]
 usos = union_all(
   union_all(
     union_all (
-      data.frame(categoria = 'Software R', uso = respostas$UsoR),
-      data.frame(categoria = 'Software\nestatístico', uso = respostas$UsoSoftEstatistico)
+      data.frame(categoria = 'R', uso = respostas$UsoR),
+      data.frame(categoria = 'Estatístico', uso = respostas$UsoSoftEstatistico)
     ),
     union_all(
       data.frame(categoria = 'Planilhas\neletrônica', uso = respostas$UsoSoftPlanilha),
       data.frame(categoria = 'Ling. de\nprogramação', uso = respostas$UsoLingProgramacao)
     ),
   ),
-  data.frame(categoria = 'Software\neducacional', uso = respostas$UsoSoftEducacional)
+  data.frame(categoria = 'Educacional', uso = respostas$UsoSoftEducacional)
 )
 
 usos$uso <- sapply(usos$uso, function(x) substrRight(x,3) )
+usos$categoria <- factor(usos$categoria, levels=c("Planilhas\neletrônica", "R", "Estatístico", "Ling. de\nprogramação", "Educacional"))
 
 ggplot(usos, aes(x = categoria, fill=uso)) +
   geom_bar(position = 'dodge') +
@@ -73,7 +74,7 @@ ggplot(usos, aes(x = categoria, fill=uso)) +
             position = position_dodge(width = 1),
             vjust = -0.2
   ) +
-  labs(x = "Categoria do software", y="Ocorrências", fill="Uso") +
+  labs(x = substitute(paste('Categoria do ', italic('software'))), y="Ocorrências", fill="Uso") +
   theme +
   theme(axis.text=element_text(size=10, family="serif")) +
   scale_y_continuous(limits = c(0, 248), breaks = seq(0, 250, by = 50)) +
